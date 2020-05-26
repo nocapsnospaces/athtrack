@@ -26,12 +26,24 @@ Requirements:
     `$ pipenv install --dev`
    
     To install the python dependencies.
+ 
+## Initializing your database
+1. `$ pipenv shell`
+2. `$ flask db upgrade`
+
+## Making model changes.
+If you alter a model, you will  need to update the database schema.
+To do so run
+
+`$ flask db migrate -m 'I changed a model'`
+
+Correct any errors, and when you are ready to apply the schema change, run
+
+`$ flask db upgrade`
 
 ## Running for development
-1.  Run
+1. `$ pipenv shell`
+2. Initialize your database if you have not already. 
+2. `$ export FLASK_ENV=development`
+3. `$ flask run`
 
-    `$ pipenv shell`
-   
-    `$ export FLASK_ENV=development`
-   
-    `$ flask run`
