@@ -1,8 +1,9 @@
 import os 
 
-from athtrack import app, cache
-
 from flask import render_template, request, Response, send_from_directory
+from time import time
+
+from athtrack import app, cache
 
 @app.route('/favicon.ico')
 @cache.cached(timeout=600)
@@ -14,11 +15,7 @@ def favicon():
 def index():
     return render_template("index.html")
 
-# Some user create and delete api endpoints
-@app.route('/api/v1/user/create/', methods=["POST"])
-def api_create_user():
-    if not request.is_json:
-        return Response(status=400)
-    content = request.get_json()
-    print(content)
-    return Response(status=200)
+
+@app.route('/api/v1/time')
+def get_current_time():
+    return {'time': time()}
