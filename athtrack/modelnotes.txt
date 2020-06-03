@@ -1,0 +1,30 @@
+User|->head coach
+	|->coach
+    |->athlete
+
+Team has many coaches
+athlete has one team
+
+Survey taken by athlete
+options
+
+Head coaches can:
+- create coaches
+- create athletes
+- create teams
+- assign students to teams
+- assign coaches to teams
+
+Coaches can:
+- create surveys
+- delete surveys
+- assign surveys
+- remind surveys
+
+Athletes can:
+- take surveys
+
+Everyone can:
+- login
+- logout
+- change their password

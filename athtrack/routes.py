@@ -1,6 +1,6 @@
 import os 
 
-from flask import render_template, send_from_directory
+from flask import render_template, request, Response, send_from_directory
 from time import time
 
 from athtrack import app, cache
@@ -14,6 +14,7 @@ def favicon():
 @app.route('/')
 def index():
     return render_template("index.html")
+
 
 @app.route('/api/v1/time')
 def get_current_time():
