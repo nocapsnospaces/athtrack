@@ -64,7 +64,7 @@ class Survey(db.Model):
     options = db.relationship('SurveyOptions', backref='survey')
 
     def answers(self):
-        return survey.options.answers
+        return Survey.options.answers
 
 
 class SurveyOptions(db.Model):
