@@ -1,8 +1,6 @@
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
 from athtrack import db, login
-
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -12,6 +10,8 @@ class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
     email = db.Column(db.String(128), index=True, unique=True)
+    firstname = db.Column(db.String(64))
+    lastname = db.Column(db.String(64))
     password_hash = db.Column(db.String(256))
 
     def set_password(self, password):
@@ -19,6 +19,12 @@ class User(UserMixin, db.Model):
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+
+    def set_firstname(self, firstname):
+        self.firstname = firstname
+
+    def set_lastname(self, lastname):
+        self.lastname = lastname
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
@@ -48,10 +54,14 @@ class Athlete(User):
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
 
+    def set_team_id(self, team_id):
+        self.team_id = team_id
+
 
 class Team(db.Model):
     __tablename__ = 'team'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
     coaches = db.relationship("Coach", secondary=team_association_table, back_populates='teams')
     athletes = db.relationship('Athlete', backref='team')
 
