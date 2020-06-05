@@ -1,18 +1,19 @@
 import athtrack.models as model
 
-def add_athletes_to_team(dict, errors):
-    students = dict['students']
-    team_id = dict['team_id']
 
-    if model.Team.query.get(dict['team_id']) is None:
+def add_athletes_to_team(dictionary, errors):
+    students = dictionary['students']
+    team_id = dictionary['team_id']
+
+    if model.Team.query.get(dictionary['team_id']) is None:
         errors.append({"msg": "team does not exist"})
         return errors
-    if dict['students'] is None:
+    if dictionary['students'] is None:
         errors.append({"msg": "provide list of students to be added"})
         return errors
 
-    students = dict['students']
-    team_id = dict['team_id']
+    students = dictionary['students']
+    team_id = dictionary['team_id']
     for u in students:
         student_id = u['student_id']
         if model.Athlete.query.get(student_id) is None:
