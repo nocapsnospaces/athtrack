@@ -46,7 +46,18 @@ class Athlete(User):
     __tablename__ = 'athlete'
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
-
+    
+    def info(self, fields=None):
+        if fields is None:
+            fields = ['id', 'email', 'team_id']
+        i = {}
+        for a in fields:
+            try:
+                v = getattr(self, a)
+                i[a] = v
+            except AttributeError:
+                continue
+        return i
 
 class Team(db.Model):
     __tablename__ = 'team'
