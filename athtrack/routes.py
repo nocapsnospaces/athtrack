@@ -1,18 +1,14 @@
 import os
 import json
+from time import time
 
 from flask import render_template, request, Response, send_from_directory, jsonify
-from time import time
-from athtrack import db
-
-from flask_login import current_user, login_user
-import athtrack.models as model
-
-from flask import render_template, request, Response, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
 from athtrack.models import User
+
+import athtrack.services.athleteService as athleteService
 
 
 @app.route('/favicon.ico')
@@ -30,6 +26,7 @@ def index():
 @app.route('/api/v1/time')
 def get_current_time():
     return {'time': time()}
+
 
 @app.route('/api/v1/user/create/', methods=["POST"])
 def add_user():
@@ -80,29 +77,28 @@ def user_login():
     login_user(u)
     return Response(json.dumps({"msg": "set the session cookie, plox"}), status=200)
 
+
 @app.route('/api/v1/logout/')
 @login_required
 def user_logout():
     logout_user()
     return Response(200)
 
-# request structure:
-# {
-# "team_id": 12,
-# "students":[
-# 	{
-# 		"student_id": 7
-# 	},
-# 		{
-# 		"student_id":8
-# 	}
-# ]
-# }
-@app.route('/headcoach/addAthletes', methods=['POST'])
-def survey_route():
-    dict = request.get_json()
-    students = dict['students']
-    for u in students:
-        model.Athlete.query.get(u['student_id']).set_team_id(dict['team_id'])
 
-    return {'status':'succesful'}
+@app.route('/api/v1/headcoach/addAthletes', methods=['POST'])
+def route_add_athletes_to_team():
+    """
+        Expects
+        ```json
+        { "team_id": 12,
+        "students":[ {"student_id": 7}, { "student_id":8}]}
+        ```
+        """
+    errors = []
+    if not request.is_json:
+        return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)
+    status = athleteService.add_athletes_to_team(request.get_json(), errors)
+    if status == 200:
+        return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+    else:
+        return Response(json.dumps(status), status=404)
