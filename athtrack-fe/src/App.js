@@ -5,7 +5,7 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Strength and Conditioning</p>
+        <p>EagleFLEX</p>
       </header>
 
       <body className="App-body">
