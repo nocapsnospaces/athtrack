@@ -83,6 +83,7 @@ def user_logout():
     return Response(200)
 
 
+
 @app.route('/api/v1/team/<team_id>/add', methods=['POST'])
 def route_add_athletes_to_team(team_id):
     """
@@ -112,3 +113,16 @@ def route_add_athletes_to_team(team_id):
             Athlete.query.get(u).team_id = team_id
             db.session.commit()
             return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+
+@app.route('/api/v1/athlete/<int:id>/', methods=["GET"])
+@login_required
+def athlete_info(id):
+    athlete = Athlete.query.filter_by(id=id).first()
+    if athlete is None:
+        return Response(json.dumps({"msg": "not here"}), status=404)
+    
+    # get the list of fields, or None
+    fields = request.args.getlist('fields', None)
+    info = athlete.info(fields=fields)
+    return Response(json.dumps(info), status=200)
+
