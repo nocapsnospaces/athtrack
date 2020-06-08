@@ -2,13 +2,11 @@ import os
 import json
 from time import time
 
-from flask import render_template, request, Response, send_from_directory, jsonify
+from flask import render_template, request, Response, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
-from athtrack.models import User
-
-import athtrack.services.athleteService as athleteService
+from athtrack.models import User, Team, Athlete
 
 
 @app.route('/favicon.ico')
@@ -85,20 +83,34 @@ def user_logout():
     return Response(200)
 
 
-@app.route('/api/v1/headcoach/addAthletes', methods=['POST'])
-def route_add_athletes_to_team():
+@app.route('/api/v1/team/<team_id>/add', methods=['POST'])
+def route_add_athletes_to_team(team_id):
     """
         Expects
         ```json
-        { "team_id": 12,
-        "students":[ {"student_id": 7}, { "student_id":8}]}
+        {"students":[ 7,8,<student_id>, <student_id>]}
         ```
         """
     errors = []
     if not request.is_json:
         return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)
-    status = athleteService.add_athletes_to_team(request.get_json(), errors)
-    if status == 200:
-        return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
-    else:
-        return Response(json.dumps(status), status=404)
+    dictionary = request.get_json()
+    students = dictionary['students']
+    team_id = int(team_id)
+    if Team.query.get(team_id) is None:
+        errors.append({"msg": "team does not exist"})
+        return errors
+    if dictionary.get('students', None) is None:
+        errors.append({"msg": "provide list of athletes to be added"})
+        return errors
+
+    for u in students:
+        if Athlete.query.get(u) is None:
+            errors.append({"msg": "Athlete does not exist"})
+            return Response(json.dumps(errors), status=404)
+        else:
+            Athlete.query.get(u).team_id = team_id
+            db.session.commit()
+            return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+
+

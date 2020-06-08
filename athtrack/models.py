@@ -19,12 +19,6 @@ class User(UserMixin, db.Model):
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def set_firstname(self, firstname):
-        self.firstname = firstname
-
-    def set_lastname(self, lastname):
-        self.lastname = lastname
-
     def __repr__(self):
         return '<User {}>'.format(self.username)
 
@@ -52,9 +46,6 @@ class Athlete(User):
     __tablename__ = 'athlete'
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
-
-    def set_team_id(self, team_id):
-        self.team_id = team_id
 
 
 class Team(db.Model):
