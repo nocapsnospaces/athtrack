@@ -5,6 +5,7 @@ import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
 import TeamButton from "./TeamButton";
 import LongButton from "./LongButton";
+import { Link } from 'react-router-dom';
 
 class CoachDash extends Component {
   render() {
@@ -16,6 +17,7 @@ class CoachDash extends Component {
         {teamTitles.map(function (team) {
           return (
             <div>
+              <Link to="/team"></Link>
               <TeamButton teamTitle={team}></TeamButton>
             </div>
           );
