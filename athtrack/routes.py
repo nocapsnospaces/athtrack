@@ -7,7 +7,7 @@ from flask import render_template, request, Response, send_from_directory
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
-from athtrack.models import User
+from athtrack.models import Athlete, User
 
 @app.route('/favicon.ico')
 @cache.cached(timeout=600)
@@ -73,8 +73,22 @@ def user_login():
     login_user(u)
     return Response(json.dumps({"msg": "set the session cookie, plox"}), status=200)
 
+
 @app.route('/api/v1/logout/')
 @login_required
 def user_logout():
     logout_user()
     return Response(200)
+
+
+@app.route('/api/v1/athlete/<int:id>/', methods=["GET"])
+@login_required
+def athlete_info(id):
+    athlete = Athlete.query.filter_by(id=id).first()
+    if athlete is None:
+        return Response(json.dumps({"msg": "not here"}), status=404)
+    
+    # get the list of fields, or None
+    fields = request.args.getlist('fields', None)
+    info = athlete.info(fields=fields)
+    return Response(json.dumps(info), status=200)
