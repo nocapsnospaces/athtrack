@@ -1,34 +1,22 @@
 import React, { Component } from "react";
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 import "./App.css";
+import CoachDash from "./components/CoachDash/CoachDash";
 import TeamView from "./components/pages/TeamView";
-import { Link } from 'react-router-dom';
+import Login from "./components/Login/Login";
 
 class App extends Component {
-  render(){
+  render() {
     return (
       <Router>
-        <Route exact path="/" render={props => (
-          <div className="App">
-            <React.Fragment>
-              <header className="App-header">
-                <p>EagleFLEX</p>
-              </header>
-              <body className="App-body">
-                <input className="Usrname-input" value="Email"></input>
-                <br></br>
-                <input className="Password-input" value="Password"></input>
-                <br></br>
-                <button className="Login-button">Login</button>
-                <Link to="/team">Team 1</Link>
-              </body>
-            </React.Fragment>
-            </div>
-        )} />
-        <Route path="/team" component={TeamView}/>
+        <div className="App">
+          <Route exact path="/" component={Login} />
+          <Route path="/home" component={CoachDash} />
+          <Route path="/team" component={TeamView} />
+        </div>
       </Router>
     );
   }
 }
 
-export default App; //Testing
+export default App;
