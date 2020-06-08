@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import "./CoachDash.css";
-import appheader from "../AppHeader";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
 import TeamButton from "./TeamButton";
@@ -16,12 +15,21 @@ class CoachDash extends Component {
         {teamTitles.map(function (team) {
           return (
             <div>
-              <TeamButton teamTitle={team}></TeamButton>
+              <TeamButton buttonTitle={team}></TeamButton>
             </div>
           );
         })}
-        <LongButton title="Manage"></LongButton>
-        <LongButton title="Logout"></LongButton>
+        <div
+          style={{
+            position: "absolute",
+            bottom: "0px",
+            width: "100%",
+            height: "60px",
+          }}
+        >
+          <LongButton buttonTitle="Manage"></LongButton>
+          <LongButton buttonTitle="Logout"></LongButton>
+        </div>
       </div>
     );
   }
