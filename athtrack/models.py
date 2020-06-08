@@ -80,4 +80,3 @@ class SurveyOptions(db.Model):
 class SurveyAnswers(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     choice_id = db.Column(db.Integer, db.ForeignKey('survey_options.id'), nullable=False)
-    student = db.Column(db.Integer, db.ForeignKey('athlete.id'), nullable=False)
