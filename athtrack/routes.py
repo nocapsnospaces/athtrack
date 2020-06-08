@@ -112,5 +112,3 @@ def route_add_athletes_to_team(team_id):
             Athlete.query.get(u).team_id = team_id
             db.session.commit()
             return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
-
-
