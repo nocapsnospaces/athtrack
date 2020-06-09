@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route } from "react-router-dom";
 import "./App.css";
 import CoachDash from "./components/CoachDash/CoachDash";
 import TeamView from "./components/pages/TeamView";
