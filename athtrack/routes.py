@@ -60,9 +60,10 @@ def add_user():
 def user_login():
     if current_user.is_authenticated:
         return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
-    if not request.is_json:
+    reqjson = request.get_json(force=True)
+    if not reqjson:
         return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)
-    data = request.get_json()
+    data = reqjson
     email = data.get('email', None)
     password = data.get('password', None)
     u = User.query.filter_by(email=email).first()
