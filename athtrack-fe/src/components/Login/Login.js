@@ -4,34 +4,17 @@ import Button from "react-bootstrap/Button"
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 
-export default class Login extends Component {
+export default function Login() {
 
-  constructor(props) {
-    super(props);
+  const history = useHistory();
 
-    this.state = {
-      email: "",
-      password: ""
-    };
-  }
+  const routeChange = () => {
+    let path = `/home`;
+    history.push(path);
+  };
 
-  validateForm() {
-    return this.state.email.length > 0 && this.state.password.length > 0;
-  }
-
-  handleChange = event => {
-    this.setState({
-      [event.target.id]: event.target.value
-    });
-  }
-
-  handleSubmit = event => {
-    event.preventDefault();
-  }
-
-  loginAPI = e =>  {
+  const loginAPI = (e) =>  {
     e.preventDefault();
-    this.setState({isSubmitting:true});
 
     var email = document.getElementById("email").value;
     var pass = document.getElementById("password").value;
@@ -41,44 +24,37 @@ export default class Login extends Component {
       headers: { 'Content-Type': 'application/json'},
       body: JSON.stringify({ email: email, password: pass })})
       .then(res => {console.log(res.status)})
+       .then(routeChange)
 
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-  }
-
-  render() {
   return (
     <div className="Login">
       <header className="Login-header">
         <p>EagleFLEX</p>
       </header>
       <div className="Login-body">
-        <Form onSubmit = {this.handleSubmit}>
+        <Form 
+        //onSubmit = {this.handleSubmit}
+        >
         <Form.Group controlId="email" bsSize="large">
         <Form.Control
                   autoFocus
                   type="email"
-                  value={this.state.email}
-                  onChange={this.handleChange}
                 />
               </Form.Group>
         <Form.Group controlId="password" bsSize="large">
           <Form.Control
-                  value={this.state.password}
-                  onChange={this.handleChange}
                   type="password"
                 />
         </Form.Group>
           <Button block 
-          disabled={!this.validateForm()}
           type="submit"
-          onClick = {this.loginAPI}>
+          onClick = {loginAPI}>
             Login
           </Button>
         </Form>
       </div>
     </div>
   );
-} } 
+} 
