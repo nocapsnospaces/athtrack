@@ -14,6 +14,7 @@ flask-login = "*"
 flask-wtf = "*"
 click = "*"
 flask-caching = "*"
+flask-cors = "*"
 
 [requires]
 python_version = "3.6"
