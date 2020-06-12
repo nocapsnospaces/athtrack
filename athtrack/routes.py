@@ -3,11 +3,12 @@ import json
 
 from time import time
 
-from flask import render_template, request, Response, send_from_directory
+from flask import render_template, request, Response, send_from_directory, make_response
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
 from athtrack.models import Athlete, User, Team
+from athtrack.services.JsonDataTemplates import teamInfo
 
 @app.route('/favicon.ico')
 @cache.cached(timeout=600)
@@ -60,9 +61,10 @@ def add_user():
 def user_login():
     if current_user.is_authenticated:
         return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
-    if not request.is_json:
+    reqjson = request.get_json(force=True)
+    if not reqjson:
         return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)
-    data = request.get_json()
+    data = reqjson
     email = data.get('email', None)
     password = data.get('password', None)
     u = User.query.filter_by(email=email).first()
@@ -92,6 +94,16 @@ def athlete_info(id):
     fields = request.args.getlist('fields', None)
     info = athlete.info(fields=fields)
     return Response(json.dumps(info), status=200)
+
+# get information for all teams
+@app.route('/api/v1/team/', methods=["GET"])
+def team_info():
+    teams = Team.query.all()
+    if teams is None:
+        return make_response({"msg": "no teams present"}, status=404)
+    info = teamInfo(teams)
+    return make_response(info, 200)
+
 
 @app.route('/api/v1/team/<team_id>/add', methods=['POST'])
 def route_add_athletes_to_team(team_id):
