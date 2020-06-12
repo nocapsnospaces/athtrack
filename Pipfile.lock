@@ -1,7 +1,11 @@
 {
     "_meta": {
         "hash": {
+<<<<<<< HEAD
             "sha256": "406ac9570a01adfea945542d23bbc17e19867ba23c79b93928634475d53ae611"
+=======
+            "sha256": "2ef7791bba0ff4df76c5168cd31653bc62fe11343a613a94278f6758648a2700"
+>>>>>>> 7a5f31adbc3ff49dd78d6886f95448555c1554f6
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -41,6 +45,7 @@
             "hashes": [
                 "sha256:a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff",
                 "sha256:e6ef2e2af84e13c4fd32c1839c1943a42f11b6b0fbcfdd6bf46547ea5482dbfe"
+<<<<<<< HEAD
             ],
             "index": "pypi",
             "version": "==1.9.0"
@@ -51,6 +56,18 @@
                 "sha256:f4d97201660e6bbcff2d89d082b5b6d31abee04b1b3003ee073a6fd25ad1d69a"
             ],
             "index": "pypi",
+=======
+            ],
+            "index": "pypi",
+            "version": "==1.9.0"
+        },
+        "flask-cors": {
+            "hashes": [
+                "sha256:72170423eb4612f0847318afff8c247b38bd516b7737adfc10d1c2cdbb382d16",
+                "sha256:f4d97201660e6bbcff2d89d082b5b6d31abee04b1b3003ee073a6fd25ad1d69a"
+            ],
+            "index": "pypi",
+>>>>>>> 7a5f31adbc3ff49dd78d6886f95448555c1554f6
             "version": "==3.0.8"
         },
         "flask-login": {
@@ -158,9 +175,13 @@
         },
         "python-editor": {
             "hashes": [
+                "sha256:5f98b069316ea1c2ed3f67e7f5df6c0d8f10b689964a4a811ff64f0106819ec8",
                 "sha256:1bf6e860a8ad52a14c3ee1252d5dc25b2030618ed80c022598f00176adc8367d",
                 "sha256:51fda6bcc5ddbbb7063b2af7509e43bd84bfc32a4ff71349ec7847713882327b",
+<<<<<<< HEAD
                 "sha256:5f98b069316ea1c2ed3f67e7f5df6c0d8f10b689964a4a811ff64f0106819ec8",
+=======
+>>>>>>> 7a5f31adbc3ff49dd78d6886f95448555c1554f6
                 "sha256:c3da2053dbab6b29c94e43c486ff67206eafbe7eb52dbec7390b5e2fb05aac77",
                 "sha256:ea87e17f6ec459e780e4221f295411462e0d0810858e055fc514684350a2f522"
             ],
