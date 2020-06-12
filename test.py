@@ -8,8 +8,6 @@ db.session.add(t)
 x = Team(id=13, name="Football")
 db.session.add(x)
 
-z = Team(id=13, name="Soccer")
-db.session.add(z)
 #
 # u = Athlete(id=50,email="jamila@jamil.com", name="jamila Jamil", team_id=12)
 # u.set_password("goodplace")
