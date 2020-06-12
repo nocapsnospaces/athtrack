@@ -7,7 +7,7 @@ class AppHeader extends Component {
       color: "black",
       fontFamily: "Calibri",
       paddingTop: "10px",
-      paddingBotton: "5px",
+      paddingBottom: "5px",
       textDecoration: "overline",
       margin: "10px auto",
     };

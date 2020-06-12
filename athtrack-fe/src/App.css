@@ -4,24 +4,24 @@
 
 .Team-page-header {
   color: black;
-  font-size: calc(20px + 2vmin);
+  padding-top: 10px;
   text-align: center;
 }
 
 .Team-page-body {
   text-align: center;
-  color: #da4910;
-  font-size: calc(20px + 2vmin);
+  color: #B23F14;
 }
 
 .Team-table, th, td {
   color: black;
-  width: 80%;
+  width: 70%;
   border: 1px solid black;
   border-collapse: collapse;
-  font-size: calc(20px + 2vmin);
+  font-size: calc(10px + 2vmin);
   margin-left: auto;
   margin-right: auto;
+  padding: 5px;
 }
 
 .th, td {
@@ -30,32 +30,30 @@
 }
 
 .ASButton {
-  background-color: #da4910;
+  background-color: #B23F14;
   color: white;
   min-height: 30px;
   margin-right: 20px;
+  padding: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border: 3px;
 }
 
 .CSButton {
-  background-color: #da4910;
+  background-color: #B23F14;
   color: white;
   min-height: 30px;
   margin-right: 20px;
+  border: 3px;
 }
 
 .DSButton {
-  background-color: #da4910;
+  background-color: #B23F14;
   color: white;
   min-height: 30px;
   margin-right: 0px;
-}
-
-.Logout-button {
-  background-color: #da4910;
-  color: white;
-  min-height: 30px;
-  bottom: 0;
-  width: 100%;
+  border: 3px;
 }
 
 .Back-button {
@@ -66,7 +64,7 @@
 }
 
 .Add-button {
-  background-color: #da4910;
+  background-color: #B23F14;
   color: white;
   border-radius: 50%;
   width: 30px;
