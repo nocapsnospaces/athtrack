@@ -1,22 +1,10 @@
 import React, { Component } from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button"
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 
-function Login(props) {
-  function loginAPI(e) {
-    e.preventDefault();
-
-    var email = document.getElementById("email").value;
-    var pass = document.getElementById("password").value;
-
-    var response = fetch("http://localhost:3000/api/v1/login/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email: email, password: pass }),
-    });
-
-    console.log(response.status);
-  }
+export default function Login() {
 
   const history = useHistory();
 
@@ -25,34 +13,48 @@ function Login(props) {
     history.push(path);
   };
 
+  const loginAPI = (e) =>  {
+    e.preventDefault();
+
+    var email = document.getElementById("email").value;
+    var pass = document.getElementById("password").value;
+
+    var response = fetch("http://localhost:5000/api/v1/login/", {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json'},
+      body: JSON.stringify({ email: email, password: pass })})
+      .then(res => {console.log(res.status)})
+       .then(routeChange)
+
+  }
+
   return (
     <div className="Login">
       <header className="Login-header">
         <p>EagleFLEX</p>
       </header>
       <div className="Login-body">
-        <form>
-          <input
-            id="email"
-            className="Usrname-input"
-            defaultValue="Email"
-            type="text"
-          ></input>
-          <br></br>
-          <input
-            id="pass"
-            className="Password-input"
-            defaultValue="Password"
-            type="password"
-          ></input>
-          <br></br>
-          <button className="Login-button" onClick={loginAPI}>
+        <Form 
+        //onSubmit = {this.handleSubmit}
+        >
+        <Form.Group controlId="email" bsSize="large">
+        <Form.Control
+                  autoFocus
+                  type="email"
+                />
+              </Form.Group>
+        <Form.Group controlId="password" bsSize="large">
+          <Form.Control
+                  type="password"
+                />
+        </Form.Group>
+          <Button block 
+          type="submit"
+          onClick = {loginAPI}>
             Login
-          </button>
-        </form>
+          </Button>
+        </Form>
       </div>
     </div>
   );
-}
-
-export default Login;
+} 

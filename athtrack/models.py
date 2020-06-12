@@ -11,6 +11,7 @@ Base = declarative_base()
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(128), index=True, unique=True)
+    name = db.Column(db.Text)
     password_hash = db.Column(db.String(256))
 
     def set_password(self, password):
@@ -20,7 +21,7 @@ class User(UserMixin, db.Model):
         return check_password_hash(self.password_hash, password)
 
     def __repr__(self):
-        return '<User {}>'.format(self.username)
+        return '<User {}>'.format(self.email)
 
 
 @login.user_loader
@@ -62,6 +63,7 @@ class Athlete(User):
 class Team(db.Model):
     __tablename__ = 'team'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.Text)
     coaches = db.relationship("Coach", secondary=team_association_table, back_populates='teams')
     athletes = db.relationship('Athlete', backref='team')
 
