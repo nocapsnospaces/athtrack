@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./AddAthletes.css";
-import "./AppHeader.js";
+//import "./AppHeader.js";
 
 class AddAthletes extends Component {
   render() {

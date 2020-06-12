@@ -4,10 +4,12 @@ import { render } from "@testing-library/react";
 class AppHeader extends Component {
   render() {
     const mystyle = {
-      color: "white",
-      backgroundColor: "DodgerBlue",
-      padding: "10px",
-      fontFamily: "Arial",
+      color: "black",
+      fontFamily: "Calibri",
+      paddingTop: "10px",
+      paddingBotton: "5px",
+      textDecoration: "overline",
+      margin: "10px auto",
     };
     return (
       <div>
