@@ -7,6 +7,27 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
+class InfoMixin:
+    _info_fields = []  # Override this to set the default fields
+    def info(self, fields=None):
+        def _is_sequence(obj):
+            return ((not hasattr(arg, "strip") and
+                     hasattr(arg, "__getitem__") or
+                     hasattr(arg, "__iter__")))
+            
+        if fields is None:
+            fields = self._info_fields
+        i = {}
+        for a in fields:
+            try:
+                v = getattr(self, a)
+                if _is_sequence(v):
+                    v = [b.info() if isinstance(b, InfoMixin) else b]
+                
+                i[a] = v
+            except AttributeError:
+                continue
+        return i
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,32 +57,27 @@ team_association_table = db.Table('team_association_table',
 )
 
 
-class Coach(User):
+class Coach(User, InfoMixin):
     # have to specify, as we need a reference to this table for the M2M relationship between coaches and teams.
     __tablename__ = 'coach'
+    _info_fields = ['id', 'email', 'teams']
+    
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     teams = db.relationship("Team", secondary=team_association_table, back_populates='coaches')
 
 
-class Athlete(User):
+class Athlete(User, InfoMixin):
     __tablename__ = 'athlete'
+    _info_fields = ['id', 'email', 'team_id']
+    
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
-    
-    def info(self, fields=None):
-        if fields is None:
-            fields = ['id', 'email', 'team_id']
-        i = {}
-        for a in fields:
-            try:
-                v = getattr(self, a)
-                i[a] = v
-            except AttributeError:
-                continue
-        return i
 
-class Team(db.Model):
+
+class Team(db.Model, InfoMixin):
     __tablename__ = 'team'
+    _info_fields = ['id', 'coaches', 'athletes']
+    
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     coaches = db.relationship("Coach", secondary=team_association_table, back_populates='teams')
@@ -70,6 +86,8 @@ class Team(db.Model):
 
 class Survey(db.Model):
     __tablename__ = 'survey'
+    _info_fields = ['id', 'question', 'options']
+    
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.Text, nullable=False)
     # can get all survey responses by survey.options.answers

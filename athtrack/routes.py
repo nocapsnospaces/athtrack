@@ -7,8 +7,9 @@ from flask import render_template, request, Response, send_from_directory, make_
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
-from athtrack.models import Athlete, User, Team
 from athtrack.services.JsonDataTemplates import teamInfo
+from athtrack.models import Athlete, Coach, Team, User
+
 
 @app.route('/favicon.ico')
 @cache.cached(timeout=600)
@@ -92,8 +93,11 @@ def athlete_info(id):
     
     # get the list of fields, or None
     fields = request.args.getlist('fields', None)
+    if len(fields) == 0:
+        fields = None
     info = athlete.info(fields=fields)
     return Response(json.dumps(info), status=200)
+
 
 # get information for all teams
 @app.route('/api/v1/team/', methods=["GET"])
@@ -103,6 +107,32 @@ def team_info():
         return make_response({"msg": "no teams present"}, status=404)
     info = teamInfo(teams)
     return make_response(info, 200)
+
+@app.route('/api/v1/coach/<int:id>/', methods=["GET"])
+@login_required
+def coach_info(id):
+    coach = Coach.query.filter_by(id=id).first()
+    if coach is None:
+        return Response(json.dumps({"msg": "not here"}), status=404)
+    
+    fields = request.args.getlist('fields')
+    if len(fields) == 0:
+        fields = None
+    info = coach.info(fields=fields)
+    return Response(json.dumps(info), status=200)
+
+
+@app.route('/api/v1/team/<int:id>/', methods=['GET'])
+@login_required
+def team_info(id):
+    team = Team.query.filter_by(id=id).first()
+    if team is None:
+        return Response(json.dumps({"msg": "not here"}), status=404)
+    fields = request.args.getlist('fields', None)
+    if len(fields) == 0:
+        fields = None
+    info = team.info(fields=fields)
+    return Response(json.dumps(info), status=200)
 
 
 @app.route('/api/v1/team/<team_id>/add', methods=['POST'])
