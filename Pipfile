@@ -15,3 +15,9 @@ flask-wtf = "*"
 click = "*"
 flask-caching = "*"
 flask-cors = "*"
+<<<<<<< HEAD
+=======
+
+[requires]
+python_version = "3.6"
+>>>>>>> 7a5f31adbc3ff49dd78d6886f95448555c1554f6
