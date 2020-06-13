@@ -8,7 +8,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
 from athtrack.models import Athlete, User, Team
-from athtrack.services.JsonDataTemplates import teamInfo
+from athtrack.services.JsonDataTemplates import teamInfo, athleteInfo
 
 @app.route('/favicon.ico')
 @cache.cached(timeout=600)
@@ -104,6 +104,15 @@ def team_info():
     info = teamInfo(teams)
     return make_response(info, 200)
 
+
+# get information for all students
+@app.route('/api/v1/athletes/', methods=["GET"])
+def athletes_info():
+    athletes = Athlete.query.filter_by(team_id=None)
+    if athletes is None:
+        return make_response({"msg": "all athletes have teams!"}, status=404)
+    info = athleteInfo(athletes)
+    return make_response(info, 200)
 
 @app.route('/api/v1/team/<team_id>/add', methods=['POST'])
 def route_add_athletes_to_team(team_id):
