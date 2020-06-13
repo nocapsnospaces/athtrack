@@ -1,6 +1,6 @@
 import athtrack.models as Model
 
-
+# create a teams json object
 def teamInfo(teams):
     team = []
     count = 0
@@ -13,13 +13,25 @@ def teamInfo(teams):
                 "name": a.name})
 
         team.append({
-            "id":t.id,
-            "name":t.name,
+            "id": t.id,
+            "name": t.name,
             "students": students
         })
         count = count + 1
 
-    return( {
+    return ({
         "number": count,
         "teams": team
+    })
+
+# create an athletes json object
+def athleteInfo(athletes):
+    students = []
+    for a in athletes:
+        students.append({
+            "id": a.id,
+            "name": a.name,
+            "team": a.team_id})
+    return ({
+        "students": students
     })
