@@ -6,11 +6,11 @@ import Select from "react-select";
 //Requires yarn add react-select
 import { Link } from "react-router-dom";
 
-/* format = [
+const format = [
   { value: "chocolate", label: "Chocolate" },
   { value: "strawberry", label: "Strawberry" },
   { value: "vanilla", label: "Vanilla" },
-]; */
+];
 
 class AddAthletes extends Component {
   constructor(props) {
@@ -54,7 +54,7 @@ class AddAthletes extends Component {
         <body className="Add-Ath-Body">
           <p>Athlete Name</p>
           <br></br>
-          <script>toConsole('Test')</script>
+          <Select options={format} isMulti />
           <br></br>
           <button type="save">Save</button>
         </body>
