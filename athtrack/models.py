@@ -10,26 +10,20 @@ Base = declarative_base()
 class InfoMixin:
     _info_fields = []  # Override this to set the default fields
     def info(self, fields=None):
-        def _is_sequence(obj):
-            return ((not hasattr(arg, "strip") and
-                     hasattr(arg, "__getitem__") or
-                     hasattr(arg, "__iter__")))
-            
         if fields is None:
             fields = self._info_fields
         i = {}
         for a in fields:
             try:
                 v = getattr(self, a)
-                if _is_sequence(v):
-                    v = [b.info() if isinstance(b, InfoMixin) else b]
-                
                 i[a] = v
             except AttributeError:
                 continue
         return i
 
-class User(UserMixin, db.Model):
+class User(UserMixin, db.Model, InfoMixin):
+    _info_fields = ['id', 'email', 'name']
+
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(128), index=True, unique=True)
     name = db.Column(db.Text)
@@ -57,18 +51,33 @@ team_association_table = db.Table('team_association_table',
 )
 
 
-class Coach(User, InfoMixin):
+class Coach(User):
     # have to specify, as we need a reference to this table for the M2M relationship between coaches and teams.
     __tablename__ = 'coach'
-    _info_fields = ['id', 'email', 'teams']
+    _info_fields = User._info_fields + ['teams']
     
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     teams = db.relationship("Team", secondary=team_association_table, back_populates='coaches')
 
+    def info(self, fields=None):
+        if fields is None:
+            fields = self._info_fields
+        s = []
+        if 'id' in fields:
+            s.append('id')
+        if 'name' in fields:
+            s.append('name')
+        if 'email' in fields:
+            s.append('email')
+        i = super().info(fields=s)
+        if 'teams' in fields:
+            i['teams'] = [t.info(fields=['id']) for t in self.teams]
+        return i
 
-class Athlete(User, InfoMixin):
+
+class Athlete(User):
     __tablename__ = 'athlete'
-    _info_fields = ['id', 'email', 'team_id']
+    _info_fields = User._info_fields + ['team_id']
     
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
@@ -76,12 +85,27 @@ class Athlete(User, InfoMixin):
 
 class Team(db.Model, InfoMixin):
     __tablename__ = 'team'
-    _info_fields = ['id', 'coaches', 'athletes']
+    _info_fields = ['id', 'coaches', 'athletes', 'name']
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     coaches = db.relationship("Coach", secondary=team_association_table, back_populates='teams')
     athletes = db.relationship('Athlete', backref='team')
+    
+    def info(self, fields=None):
+        if fields is None:
+            fields = self._info_fields
+        s = []
+        if 'id' in fields:
+            s.append('id')
+        if 'name' in fields:
+            s.append('name')
+        i = super().info(fields=s)
+        if 'coaches' in fields:
+            i['coaches'] = [c.info(fields=['id']) for c in self.coaches]
+        if 'athletes' in fields:
+            i['athletes'] = [c.info(fields=['id']) for c in self.athletes]
+        return i
 
 
 class Survey(db.Model):

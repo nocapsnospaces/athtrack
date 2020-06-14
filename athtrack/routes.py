@@ -85,7 +85,6 @@ def user_logout():
 
 
 @app.route('/api/v1/athlete/<int:id>/', methods=["GET"])
-@login_required
 def athlete_info(id):
     athlete = Athlete.query.filter_by(id=id).first()
     if athlete is None:
@@ -101,7 +100,7 @@ def athlete_info(id):
 
 # get information for all teams
 @app.route('/api/v1/team/', methods=["GET"])
-def team_info():
+def all_team_info():
     teams = Team.query.all()
     if teams is None:
         return make_response({"msg": "no teams present"}, status=404)
@@ -109,7 +108,6 @@ def team_info():
     return make_response(info, 200)
 
 @app.route('/api/v1/coach/<int:id>/', methods=["GET"])
-@login_required
 def coach_info(id):
     coach = Coach.query.filter_by(id=id).first()
     if coach is None:
@@ -123,7 +121,6 @@ def coach_info(id):
 
 
 @app.route('/api/v1/team/<int:id>/', methods=['GET'])
-@login_required
 def team_info(id):
     team = Team.query.filter_by(id=id).first()
     if team is None:
