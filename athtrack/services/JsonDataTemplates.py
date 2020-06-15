@@ -23,3 +23,15 @@ def teamInfo(teams):
         "number": count,
         "teams": team
     })
+
+# create an athletes json object
+def athleteInfo(athletes):
+    students = []
+    for a in athletes:
+        students.append({
+            "id": a.id,
+            "name": a.name,
+            "team": a.team_id})
+    return ({
+        "students": students
+    })

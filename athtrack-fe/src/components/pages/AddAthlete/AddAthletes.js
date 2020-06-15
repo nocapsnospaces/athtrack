@@ -2,47 +2,70 @@ import React, { Component, useEffect } from "react";
 import AppHeader from "../../AppHeader";
 import AppSubHeader from "../../AppSubHeader";
 import "./AddAthletes.css";
-import Select from "react-select";
-//Requires yarn add react-select
-import { Link } from "react-router-dom";
-
-const format = [
-  { value: "chocolate", label: "Chocolate" },
-  { value: "strawberry", label: "Strawberry" },
-  { value: "vanilla", label: "Vanilla" },
-];
+import { Multiselect } from 'multiselect-react-dropdown';
+import { Link, useHistory} from "react-router-dom";
 
 class AddAthletes extends Component {
+
   constructor(props) {
     super(props);
-
+    this.multiselectRef = React.createRef();
+    this.addAthletes = this.addAthletes.bind(this);
     this.state = {
-      athleteNames: [],
-      ath: null,
+      athletes: [],
+      team: 120
     };
   }
 
+  redirectToHome = () => {
+    const { history } = this.props;
+    if(history) history.push('/team');
+   }
+
   componentDidMount() {
-    fetch("https://localhost:3000/api/v1/athletes", {
-      method: "GET",
-      headers: { "Content-Type": "application/json" },
+    fetch("http://localhost:3000/api/v1/athletes/", {
+      method: "GET"
     })
       .then((response) => response.json())
       .then((data) => {
-        console.print(data);
+        this.setAthletes(data);
       });
   }
 
-  setAthletes(data) {
-    var names = [];
-    for (var i = 0; i < data.number; i++) {
-      names.push(data.teams[i].name);
+  //add the selected athletes to the team
+  addAthletes() {
+    var TBAAthletes = this.multiselectRef.current.getSelectedItems();
+    var ids = [];
+    for (var i = 0; i < TBAAthletes.length; i++) {
+      ids.push(TBAAthletes[i].id);
     }
-    this.setState({ athleteNames: names, ath: data });
+    var Addurl = "http://localhost:5000/api/v1/team/" + String(this.state.team) + "/add";
+    fetch(Addurl, {
+      method: "POST",
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ students: ids })
+    })
+    .then(res => {this.redirectToHome()})
+
+  }
+
+  setAthletes(data) {
+    var athletes = [];
+    for (var i = 0; i < data.students.length; i++) {
+      athletes.push(
+        {
+          name: data.students[i].name,
+          id: data.students[i].id
+        }
+      );
+    }
+    console.log(athletes)
+    this.setState({ athletes: athletes });
   }
 
   render() {
-    const { athleteNames } = this.state;
+    const { athletes } = this.state;
+    const { history } = this.props;
     return (
       <div className="Add-Ath">
         <header>
@@ -50,17 +73,25 @@ class AddAthletes extends Component {
           <AppHeader />
           <AppSubHeader title="Add Athlete" />
         </header>
-
-        <body className="Add-Ath-Body">
-          <p>Athlete Name</p>
+        <div>
           <br></br>
-          <Select options={format} isMulti />
+          <Multiselect
+            options={this.state.athletes} // Options to display in the dropdown
+            selectedValues={this.state.selectedValue} // Preselected value to persist in dropdown
+            showCheckbox={true}
+            closeOnSelect={false}
+            ref={this.multiselectRef}
+            // onSelect={this.onSelect} // Function will trigger on select event
+            // onRemove={this.onRemove} // Function will trigger on remove event
+            displayValue="name" // Property name to display in the dropdown options
+          />
           <br></br>
-          <button type="save">Save</button>
-        </body>
+          <button block
+            type="submit"
+            onClick={this.addAthletes}>Save</button>
+        </div>
       </div>
     );
   }
 }
-
 export default AddAthletes;
