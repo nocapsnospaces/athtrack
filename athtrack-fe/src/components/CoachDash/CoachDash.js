@@ -9,7 +9,7 @@ import LogoutButton from "../Login/LogoutButton";
 class CoachDash extends Component {
   constructor(props) {
     super(props);
- 
+
     this.state = {
       teamTitles: [],
       teams : null
@@ -25,12 +25,12 @@ class CoachDash extends Component {
      //this.setState({ hits: data.teamTitles })
   }
 
-  setTeamTitles(data){
-    var titles = []
-    for( var i = 0; i < data.number; i++ ){
-      titles.push(data.teams[i].name)
+  setTeamTitles(data) {
+    var titles = [];
+    for (var i = 0; i < data.number; i++) {
+      titles.push(data.teams[i].name);
     }
-    this.setState({ teamTitles: titles, teams: data })
+    this.setState({ teamTitles: titles, teams: data });
   }
 
   render(){
