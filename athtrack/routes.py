@@ -9,6 +9,7 @@ from flask_login import current_user, login_user, logout_user, login_required
 from athtrack import app, cache, db
 from athtrack.models import Athlete, Survey, Team, User
 from athtrack.services.JsonDataTemplates import teamInfo, athleteInfo
+from athtrack.models import Athlete, User, Team
 
 
 @app.route('/favicon.ico')
@@ -146,7 +147,8 @@ def route_add_athletes_to_team(team_id):
         else:
             Athlete.query.get(u).team_id = team_id
             db.session.commit()
-            return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+
+    return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
 
 
 
@@ -157,19 +159,19 @@ def assign_to_survey(id):
         "athletes": [1, 2, 3, 4, 5]
     }
     """
-    
+
     if not request.is_json:
         return Response(json.dumps({'msg': 'go away'}), status=400)
-    
+
     data = request.get_json()
     athletes = data.get('athletes', None)
-    
+
     if athletes is None:
         return Response(json.dumps({'msg': 'bad request'}), status=400)
     survey = Survey.query.filter_by(id=id).first()
     if survey is None:
         return Response(json.dumps({'msg': 'bad request'}), status=400)
-    
+
     # TODO: sanitize the athlete pks, eh.
     athletes = Athlete.query.filter(Athlete.id.in_(athletes)).all()
     survey.assignees += athletes

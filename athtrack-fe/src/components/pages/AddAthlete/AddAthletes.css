@@ -1,0 +1,27 @@
+.AddAthletes {
+  text-align: center;
+  background-color: white;
+}
+
+.Add-Ath-Header {
+  padding-top: 50px;
+  background-color: white;
+  max-height: 10vh;
+  font-size: calc(10px + 2vmin);
+  color: #da4910;
+}
+
+.Add-Ath-Body {
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  color: black;
+}
+
+.Back-button {
+  background-color: #da4910;
+  color: black;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
