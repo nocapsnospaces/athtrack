@@ -1,9 +1,9 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import AppHeader from "../../AppHeader";
 import AppSubHeader from "../../AppSubHeader";
 import "./AddAthletes.css";
 import { Multiselect } from 'multiselect-react-dropdown';
-import { Link, useHistory} from "react-router-dom";
+import { Link} from "react-router-dom";
 
 class AddAthletes extends Component {
 
@@ -59,7 +59,6 @@ class AddAthletes extends Component {
         }
       );
     }
-    console.log(athletes)
     this.setState({ athletes: athletes });
   }
 
@@ -86,7 +85,7 @@ class AddAthletes extends Component {
             displayValue="name" // Property name to display in the dropdown options
           />
           <br></br>
-          <button block
+          <button
             type="submit"
             onClick={this.addAthletes}>Save</button>
         </div>
