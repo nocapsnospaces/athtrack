@@ -35,6 +35,13 @@ team_association_table = db.Table('team_association_table',
     db.Column('team_id', db.Integer, db.ForeignKey('team.id')),
 )
 
+# bridges for days
+survey_assignment_table = db.Table('survey_assignment_table',
+    db.Column('athlete_id', db.Integer, db.ForeignKey('athlete.id')),
+    db.Column('survey_id', db.Integer, db.ForeignKey('survey.id')),
+    db.Column('taken', db.Boolean, nullable=False, default=False)
+)
+
 
 class Coach(User):
     # have to specify, as we need a reference to this table for the M2M relationship between coaches and teams.
@@ -47,6 +54,7 @@ class Athlete(User):
     __tablename__ = 'athlete'
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+    surveys = db.relationship("Survey", secondary=survey_assignment_table, back_populates='assignees')
     
     def info(self, fields=None):
         if fields is None:
@@ -59,6 +67,7 @@ class Athlete(User):
             except AttributeError:
                 continue
         return i
+
 
 class Team(db.Model):
     __tablename__ = 'team'
@@ -74,6 +83,7 @@ class Survey(db.Model):
     question = db.Column(db.Text, nullable=False)
     # can get all survey responses by survey.options.answers
     options = db.relationship('SurveyOptions', backref='survey')
+    assignees = db.relationship("Athlete", secondary=survey_assignment_table, back_populates='surveys')
 
     def answers(self):
         return self.options.answers
