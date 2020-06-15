@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React from "react";
+import {  useHistory } from "react-router-dom";
 
 function TeamButton(props) {
   const history = useHistory();
