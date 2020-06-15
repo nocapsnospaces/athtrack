@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
 import AthleteTable from "../AthleteTable";
-import LongButton from "../CoachDash/LongButton";
+//import LongButton from "../CoachDash/LongButton";
 
 function TeamView() {
     return (

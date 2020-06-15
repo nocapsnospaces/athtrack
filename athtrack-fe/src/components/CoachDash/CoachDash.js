@@ -1,10 +1,10 @@
-import React, { Component, useEffect } from "react";
+import React, { Component } from "react";
 import "./CoachDash.css";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
 import TeamButton from "./TeamButton";
 import LongButton from "./LongButton";
-import { Link, useHistory } from "react-router-dom";
+import LogoutButton from "../Login/LogoutButton";
 
 class CoachDash extends Component {
   constructor(props) {
@@ -17,7 +17,7 @@ class CoachDash extends Component {
   }
 
   componentDidMount() {
-    fetch("http://localhost:5000/api/v1/team/", {
+    fetch("http://localhost:3000/api/v1/team/", {
       method: "GET",
       headers: { 'Content-Type': 'application/json'}})
       .then(response => response.json())
@@ -55,7 +55,7 @@ class CoachDash extends Component {
         }}
       >
         <LongButton buttonTitle="Manage"></LongButton>
-        <LongButton buttonTitle="Logout"></LongButton>
+        <LogoutButton buttonTitle="Logout"></LogoutButton>
       </div>
     </div>
   );
