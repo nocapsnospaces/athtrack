@@ -23,13 +23,14 @@ class AddAthletes extends Component {
   }
 
   componentDidMount() {
+    console.log("Hello World");
     fetch("https://localhost:3000/api/v1/athletes", {
       method: "GET",
       headers: { "Content-Type": "application/json" },
     })
       .then((response) => response.json())
       .then((data) => {
-        console.print(data);
+        console.log(data);
       });
   }
 
