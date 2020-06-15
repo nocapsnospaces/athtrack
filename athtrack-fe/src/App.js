@@ -4,6 +4,7 @@ import "./App.css";
 import CoachDash from "./components/CoachDash/CoachDash";
 import TeamView from "./components/pages/TeamView";
 import Login from "./components/Login/Login";
+import AssignSurveyView from "./components/pages/AssignSurveyView";
 
 class App extends Component {
   render() {
@@ -13,6 +14,7 @@ class App extends Component {
           <Route exact path="/" component={Login} />
           <Route path="/home" component={CoachDash} />
           <Route path="/team" component={TeamView} />
+          <Route path="/survey" component={AssignSurveyView} />
         </div>
       </Router>
     );
