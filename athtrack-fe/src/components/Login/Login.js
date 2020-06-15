@@ -1,11 +1,10 @@
 import React, { Component } from "react";
 import Form from "react-bootstrap/Form";
-import Button from "react-bootstrap/Button"
+import Button from "react-bootstrap/Button";
 import "./Login.css";
 import { Link, useHistory } from "react-router-dom";
 
 export default function Login() {
-
   const history = useHistory();
 
   const routeChange = () => {
@@ -13,7 +12,7 @@ export default function Login() {
     history.push(path);
   };
 
-  const loginAPI = (e) =>  {
+  const loginAPI = (e) => {
     e.preventDefault();
 
     var email = document.getElementById("email").value;
@@ -21,12 +20,14 @@ export default function Login() {
 
     var response = fetch("http://localhost:5000/api/v1/login/", {
       method: "POST",
-      headers: { 'Content-Type': 'application/json'},
-      body: JSON.stringify({ email: email, password: pass })})
-      .then(res => {console.log(res.status)})
-       .then(routeChange)
-
-  }
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: email, password: pass }),
+    })
+      .then((res) => {
+        console.log(res.status);
+      })
+      .then(routeChange);
+  };
 
   return (
     <div className="Login">
@@ -34,27 +35,20 @@ export default function Login() {
         <p>EagleFLEX</p>
       </header>
       <div className="Login-body">
-        <Form 
+        <Form
         //onSubmit = {this.handleSubmit}
         >
-        <Form.Group controlId="email" bsSize="large">
-        <Form.Control
-                  autoFocus
-                  type="email"
-                />
-              </Form.Group>
-        <Form.Group controlId="password" bsSize="large">
-          <Form.Control
-                  type="password"
-                />
-        </Form.Group>
-          <Button block 
-          type="submit"
-          onClick = {loginAPI}>
+          <Form.Group controlId="email" bsSize="large">
+            <Form.Control autoFocus type="email" />
+          </Form.Group>
+          <Form.Group controlId="password" bsSize="large">
+            <Form.Control type="password" />
+          </Form.Group>
+          <Button block type="submit" onClick={loginAPI}>
             Login
           </Button>
         </Form>
       </div>
     </div>
   );
-} 
+}
