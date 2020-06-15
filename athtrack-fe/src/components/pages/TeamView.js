@@ -1,10 +1,10 @@
 import React from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import AthleteTable from "../AthleteTable";
-import LongButton from "../CoachDash/LongButton";
+
+import LogoutButton from "../Login/LogoutButton";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
-import CoachDash from "../CoachDash/CoachDash";
 
 function TeamView() {
     
@@ -36,7 +36,7 @@ function TeamView() {
                         height: "60px",
                     }}
                 >
-                    <LongButton buttonTitle="Logout"></LongButton>
+                    <LogoutButton buttonTitle="Logout"/>
                 </div>
             </body>
         </div>
