@@ -1,5 +1,3 @@
-from functools import wraps
-
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from sqlalchemy.ext.declarative import declarative_base
@@ -49,51 +47,37 @@ survey_assignment_table = db.Table('survey_assignment_table',
 class Coach(User):
     # have to specify, as we need a reference to this table for the M2M relationship between coaches and teams.
     __tablename__ = 'coach'
-    _info_fields = User._info_fields + ['teams']
+    _simple_fields = User._info_fields
+    _complex_fields = ['teams']
     
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     teams = db.relationship("Team", secondary=team_association_table, back_populates='coaches')
 
     def info(self, fields=None):
-        if fields is None:
-            fields = self._info_fields
-        s = []
-        if 'id' in fields:
-            s.append('id')
-        if 'name' in fields:
-            s.append('name')
-        if 'email' in fields:
-            s.append('email')
-        i = super().info(fields=s)
-        if 'teams' in fields:
-            i['teams'] = [t.info(fields=['id']) for t in self.teams]
+        i = self._info_complex(fields=fields)
+        i.update({"type": "coach"})
         return i
 
 
 class Athlete(User):
     __tablename__ = 'athlete'
-    _info_fields = User._info_fields + ['team_id']
+    _simple_fields = User._info_fields + ['team_id']
+    _complex_fields = ['surveys']
     
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
     surveys = db.relationship("Survey", secondary=survey_assignment_table, back_populates='assignees')
     
     def info(self, fields=None):
-        if fields is None:
-            fields = ['id', 'email', 'team_id']
-        i = {}
-        for a in fields:
-            try:
-                v = getattr(self, a)
-                i[a] = v
-            except AttributeError:
-                continue
+        i = self._info_complex(fields=fields)
+        i.update({"type": "athlete"})
         return i
 
 
 class Team(db.Model, InfoMixin):
     __tablename__ = 'team'
-    _info_fields = ['id', 'coaches', 'athletes', 'name']
+    _simple_fields = ['id', 'name']
+    _complex_fields = ['coaches', 'athletes']
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
@@ -101,24 +85,13 @@ class Team(db.Model, InfoMixin):
     athletes = db.relationship('Athlete', backref='team')
     
     def info(self, fields=None):
-        if fields is None:
-            fields = self._info_fields
-        s = []
-        if 'id' in fields:
-            s.append('id')
-        if 'name' in fields:
-            s.append('name')
-        i = super().info(fields=s)
-        if 'coaches' in fields:
-            i['coaches'] = [c.info(fields=['id']) for c in self.coaches]
-        if 'athletes' in fields:
-            i['athletes'] = [c.info(fields=['id']) for c in self.athletes]
-        return i
+        return self._info_complex(fields=fields)
 
 
 class Survey(db.Model, InfoMixin):
     __tablename__ = 'survey'
-    _info_fields = ['id', 'question', 'options']
+    _simple_fields = ['id', 'question']
+    _complex_fields = ['options', 'assignees']
     
     id = db.Column(db.Integer, primary_key=True)
     question = db.Column(db.Text, nullable=False)
@@ -126,8 +99,12 @@ class Survey(db.Model, InfoMixin):
     options = db.relationship('SurveyOptions', backref='survey')
     assignees = db.relationship("Athlete", secondary=survey_assignment_table, back_populates='surveys')
 
+    @property
     def answers(self):
         return self.options.answers
+    
+    def info(self, fields=None):
+       return self._info_complex(fields=fields)
 
 
 class SurveyOptions(db.Model):
