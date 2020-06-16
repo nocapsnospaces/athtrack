@@ -62,8 +62,9 @@ def add_user():
 
 @app.route('/api/v1/login/', methods=["POST"])
 def user_login():
-    if current_user.is_authenticated:
-        return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
+    # currently commented out as event cannot be handled by FE yet
+    # if current_user.is_authenticated:
+    #     return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
     reqjson = request.get_json(force=True)
     if not reqjson:
         return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)

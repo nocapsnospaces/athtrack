@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Link, useHistory } from 'react-router-dom';
 import AthleteTable from "../AthleteTable";
 
@@ -6,26 +6,37 @@ import LogoutButton from "../Login/LogoutButton";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
 
-function TeamView() {
+class TeamView extends Component {
 
-    const history = useHistory();
+    constructor(props) {
+        super(props);
 
-    const routeChange = () => {
-        let path = `/survey`;
-        history.push(path);
+        this.state = {
+            returnState: this.props.location.state,
+            athletes: [],
+            students: this.props.location.state.team.students,
+            id: this.props.location.state.team.id,
+            name: this.props.location.state.name
+        };
+    }
+
+    addAthletes = () => {
+        const { history } = this.props;
+        let path = `/addAth`;
+        history.push({ pathname: path, state: this.state.returnState });
     };
 
-    return (
-        <div>
-            <header className="Team-page-header">
-                <AppHeader />
-                <AppSubHeader title="Team" />
-                <Link className="Back-button" to="/home"></Link>
-                <button className="Add-button">+</button>
-            </header>
-            <body className="Team-page-body">
-                <AthleteTable />
-                <button className="ASButton" onClick={routeChange}>Assign Survey</button>
+    render() {
+        return (
+            <div>
+                <header className="Team-page-header">
+                    <AppHeader />
+                    <AppSubHeader title={this.state.name} />
+                    <Link className="Back-button" to="/coachdash"></Link>
+                    <button className="Add-button" onClick={this.addAthletes}>+</button>
+                </header>
+                <AthleteTable data={this.state.students}></AthleteTable>
+                <button className="ASButton" onClick={this.routeChange}>Assign Survey</button>
                 <button className="CSButton">Create Survey</button>
                 <button className="DSButton">Delete Survey</button>
                 <div
@@ -36,12 +47,11 @@ function TeamView() {
                         height: "60px",
                     }}
                 >
-                    <LogoutButton buttonTitle="Logout"/>
+                    <LogoutButton buttonTitle="Logout" />
                 </div>
-            </body>
-        </div>
-    );
+            </div>
+        )
+    };
 }
 
 export default TeamView;
-//                <button className="ASButton">Assign Survey</button>

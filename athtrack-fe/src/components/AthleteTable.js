@@ -1,25 +1,61 @@
 import React, { Component } from 'react';
 
-class AthleteTable extends Component{
+class AthleteTable extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            athletes: [],
+            students: this.props.data
+
+        };
+    }
+
     render() {
-        return (
-            <div>
-                <table className="Team-table">
-                    <tr>
-                        <th>Student Name</th>
-                    </tr>
-                    <tr>
-                        <td>John Sutter</td>
-                    </tr>
-                    <tr>
-                        <td>Romeo Bennett</td>
-                    </tr>
-                    <tr>
-                        <td>Chad Johnson</td>
-                    </tr>
+        const students = this.state.students;
+        if (students) {
+            return (
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {this.state.students.map((data, key) => {
+                            return (
+                                <tr key={key}>
+                                    <td>{data.name}</td>
+                                    <td>{data.id}</td>
+                                </tr>
+                            )
+                        })}
+                    </tbody>
                 </table>
-            </div> 
-        );
+            );
+        }
+        else {
+            return (
+                <table>
+                    <thead>
+
+                        <tr>
+                            <th>Name</th>
+                            <th>ID</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td> " dfd"</td>
+                            <td> " dfdg" </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            )
+        }
     }
 }
 
