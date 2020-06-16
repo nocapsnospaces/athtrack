@@ -3,12 +3,19 @@ import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
 import LogoutButton from "../Login/LogoutButton";
 import ChangePassword from "./ChangePassword";
-import ChangePassDialog from "./ChangePassDialog";
+import ChangePassDialog from "./ChangePassView";
 import SurveyButton from "./SurveyButton";
 
 class StudentDash extends Component {
-  state = { ChangePassword: false };
+  state = {
+    seen: false,
+  };
 
+  togglePop = () => {
+    this.setState({
+      seen: !this.state.seen,
+    });
+  };
   render() {
     const SurveyTitles = ["Survey 1", "Survey 2", "Survey 3"];
     const mystyle = {
@@ -34,30 +41,8 @@ class StudentDash extends Component {
             </div>
           );
         })}
-        <div
-          style={{
-            position: "absolute",
-            bottom: "0px",
-            width: "100%",
-            height: "60px",
-          }}
-        >
-          <button
-            style={mystyle}
-            onClick={(e) => this.setState({ ChangePassword: true })}
-          >
-            Change Password
-          </button>
-
-          <ChangePassDialog
-            ChangePassword={this.state.ChangePassword}
-            onClose={(e) => this.setState({ ChangePassword: false })}
-          >
-            Change Password
-          </ChangePassDialog>
-
-          <LogoutButton buttonTitle="Logout"></LogoutButton>
-        </div>
+        <ChangePassword buttonTitle="Change Password"></ChangePassword>
+        <LogoutButton buttonTitle="Logout"></LogoutButton>
       </div>
     );
   }
