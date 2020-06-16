@@ -2,28 +2,32 @@ import React, { Component } from "react";
 import AppHeader from "../../AppHeader";
 import AppSubHeader from "../../AppSubHeader";
 import "./AddAthletes.css";
-import { Multiselect } from "multiselect-react-dropdown";
-import { Link } from "react-router-dom";
+import { Multiselect } from 'multiselect-react-dropdown';
+import { Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 class AddAthletes extends Component {
+
   constructor(props) {
     super(props);
     this.multiselectRef = React.createRef();
     this.addAthletes = this.addAthletes.bind(this);
     this.state = {
+      returnState: this.props.location.state,
       athletes: [],
-      team: 120,
+      team: this.props.location.state.team.id
     };
   }
 
   redirectToHome = () => {
     const { history } = this.props;
-    if (history) history.push("/team");
-  };
+    let path = `/team`;
+    history.push({ pathname: path, state: this.state.returnState });
+   }
 
   componentDidMount() {
     fetch("http://localhost:3000/api/v1/athletes/", {
-      method: "GET",
+      method: "GET"
     })
       .then((response) => response.json())
       .then((data) => {
@@ -33,29 +37,34 @@ class AddAthletes extends Component {
 
   //add the selected athletes to the team
   addAthletes() {
+    
     var TBAAthletes = this.multiselectRef.current.getSelectedItems();
+    if(TBAAthletes.length > 0){
     var ids = [];
     for (var i = 0; i < TBAAthletes.length; i++) {
       ids.push(TBAAthletes[i].id);
     }
-    var Addurl =
-      "http://localhost:5000/api/v1/team/" + String(this.state.team) + "/add";
+    var Addurl = "http://localhost:5000/api/v1/team/" + String(this.state.team) + "/add";
     fetch(Addurl, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ students: ids }),
-    }).then((res) => {
-      this.redirectToHome();
-    });
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ students: ids })
+    })
+    .then(res => {this.redirectToHome()})
+  }
+  else{this.redirectToHome()}
+
   }
 
   setAthletes(data) {
     var athletes = [];
     for (var i = 0; i < data.students.length; i++) {
-      athletes.push({
-        name: data.students[i].name,
-        id: data.students[i].id,
-      });
+      athletes.push(
+        {
+          name: data.students[i].name,
+          id: data.students[i].id
+        }
+      );
     }
     this.setState({ athletes: athletes });
   }
@@ -63,10 +72,11 @@ class AddAthletes extends Component {
   render() {
     const { athletes } = this.state;
     const { history } = this.props;
+
     return (
       <div className="Add-Ath">
         <header>
-          <Link className="Back-button" to="/team"></Link>
+          <Button className="Back-button" onClick={this.redirectToHome}>BACK</Button>
           <AppHeader />
           <AppSubHeader title="Add Athlete" />
         </header>
@@ -83,9 +93,9 @@ class AddAthletes extends Component {
             displayValue="name" // Property name to display in the dropdown options
           />
           <br></br>
-          <button type="submit" onClick={this.addAthletes}>
-            Save
-          </button>
+          <button
+            type="submit"
+            onClick={this.addAthletes}>Save</button>
         </div>
       </div>
     );

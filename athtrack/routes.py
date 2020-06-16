@@ -57,8 +57,9 @@ def add_user():
 
 @app.route('/api/v1/login/', methods=["POST"])
 def user_login():
-    if current_user.is_authenticated:
-        return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
+    # currently commented out as event cannot be handled by FE yet
+    # if current_user.is_authenticated:
+    #     return Response(json.dumps({"msg": "You're already logged in, dummy"}), status=400)
     if not request.is_json:
         return Response(json.dumps({'msg': "Bad request MIME type"}), status=400)
     data = request.get_json(force=True)
@@ -66,19 +67,19 @@ def user_login():
     password = data.get('password', None)
     if email is None or password is None:
         return Response(json.dumps({"msg": "go away"}), status=400)
-    
+
     u = Coach.query.filter_by(email=email).first()
     if u is None:
         u = Athlete.query.filter_by(email=email).first()
-    
+
     if u is None:
         return Response(json.dumps({"msg": "go away"}), status=404)
-    
+
     if not u.check_password(password):
         return Response(json.dumps({"msg": "go away"}), status=401)
-    
+
     login_user(u)
-    
+
     user_info = u.info()
     return Response(json.dumps({"user": user_info}), status=200)
 

@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
-import TeamButton from "./TeamButton";
 import LongButton from "./LongButton";
 import LogoutButton from "../Login/LogoutButton";
+
 
 class CoachDash extends Component {
   constructor(props) {
@@ -24,30 +24,55 @@ class CoachDash extends Component {
       .then((data) => {
         this.setTeamTitles(data);
       });
-    //this.setState({ hits: data.teamTitles })
   }
 
   setTeamTitles(data) {
     var titles = [];
     for (var i = 0; i < data.number; i++) {
-      titles.push(data.teams[i].name);
+      titles.push({
+        name: data.teams[i].name,
+        team: data.teams[i],
+        data: null
+      });
     }
     this.setState({ teamTitles: titles, teams: data });
   }
 
+    routeChange () {
+      const { history } = this.props;
+      let path = `/survey`;
+      if (history) history.push(path);
+  };
+
+  handleTeam(data) {
+    const { history } = this.props;
+    let path = `/team`;
+    history.push({ pathname: path, state: data });
+
+  };
+
   render() {
-    const { teamTitles } = this.state;
+
     return (
       <div className="CoachDash">
         <AppHeader />
         <AppSubHeader title="Welcome" />
-        {teamTitles.map(function (team) {
-          return (
-            <div>
-              <TeamButton buttonTitle={team}></TeamButton>
-            </div>
-          );
-        })}
+        {this.state.teamTitles.map((team, id) =>
+          <div key={id}><button
+            style={{
+              width: "200px",
+              height: "30px",
+              backgroundColor: "white",
+              borderRadius: "20px",
+              border: "3px solid #b23f14",
+              fontSize: "13px",
+              verticalAlign: "bottom",
+              marginTop: "40px",
+            }}
+            onClick={e => { this.handleTeam(team) }}
+          >{team.name}</button></div>
+        )
+        }
         <div
           style={{
             position: "absolute",
@@ -59,7 +84,7 @@ class CoachDash extends Component {
           <LongButton buttonTitle="Manage"></LongButton>
           <LogoutButton buttonTitle="Logout"></LogoutButton>
         </div>
-      </div>
+      </div >
     );
   }
 }

@@ -9,7 +9,7 @@ export default function Login() {
   
   const handleResponse = (response) => {
     if (response.status === 200) {
-      let path = `/home`;
+      let path = `/coachdash`;
       history.push(path);
     }
   };
