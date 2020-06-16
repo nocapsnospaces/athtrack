@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
-import TeamButton from "./TeamButton";
 import LongButton from "./LongButton";
 import LogoutButton from "../Login/LogoutButton";
 
