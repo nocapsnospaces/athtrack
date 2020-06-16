@@ -16,14 +16,24 @@ class AthleteTable extends Component {
         const students = this.state.students;
         if (students) {
             return (
-                <table>
+                <table
+                    style={{
+                        width: "300px",
+                        backgroundColor: "white",
+                        borderRadius: "20px",
+                        fontSize: "13px",
+                        margin: "10px auto",
+                        verticalAlign: "bottom",
+                        marginTop: "40px",
+                        textAlign: "center"
+                    }}>
                     <thead>
                         <tr>
                             <th>Name</th>
                             <th>ID</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody style={{ textAlign: "center" }}>
                         {this.state.students.map((data, key) => {
                             return (
                                 <tr key={key}>

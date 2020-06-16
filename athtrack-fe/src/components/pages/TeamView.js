@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { Link, useHistory } from 'react-router-dom';
 import AthleteTable from "../AthleteTable";
-
 import LogoutButton from "../Login/LogoutButton";
 import AppHeader from "../AppHeader";
 import AppSubHeader from "../AppSubHeader";
+import Button from 'react-bootstrap/Button';
 
 class TeamView extends Component {
 
@@ -26,13 +25,19 @@ class TeamView extends Component {
         history.push({ pathname: path, state: this.state.returnState });
     };
 
+    redirectToHome = () => {
+        const { history } = this.props;
+        let path = `/coachdash`;
+        history.push({ pathname: path, state: this.state.returnState });
+       }
+
     render() {
         return (
             <div>
                 <header className="Team-page-header">
                     <AppHeader />
                     <AppSubHeader title={this.state.name} />
-                    <Link className="Back-button" to="/coachdash"></Link>
+                    <Button className="Back-button" onClick={this.redirectToHome}>BACK</Button>
                     <button className="Add-button" onClick={this.addAthletes}>+</button>
                 </header>
                 <AthleteTable data={this.state.students}></AthleteTable>

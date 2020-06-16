@@ -4,6 +4,7 @@ import AppSubHeader from "../../AppSubHeader";
 import "./AddAthletes.css";
 import { Multiselect } from 'multiselect-react-dropdown';
 import { Link} from "react-router-dom";
+import Button from "react-bootstrap/Button";
 
 class AddAthletes extends Component {
 
@@ -75,7 +76,7 @@ class AddAthletes extends Component {
     return (
       <div className="Add-Ath">
         <header>
-          <Link className="Back-button" to="/team"></Link>
+          <Button className="Back-button" onClick={this.redirectToHome}></Button>
           <AppHeader />
           <AppSubHeader title="Add Athlete" />
         </header>

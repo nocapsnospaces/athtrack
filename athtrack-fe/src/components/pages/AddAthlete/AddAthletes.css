@@ -19,7 +19,12 @@
 }
 
 .Back-button {
-  background-color: #da4910;
+  border-radius: 20px;
+  border: 2px solid white;
+  min-width: 8vh;
+  min-height: 8vh;
+  margin: 20px;
+  background-color:white;
   color: black;
   position: absolute;
   top: 0;
