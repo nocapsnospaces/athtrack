@@ -5,7 +5,7 @@ function SurveyButton(props) {
   const history = useHistory();
 
   const routeChange = () => {
-    let path = `/assignsurvey`;
+    let path = `/takesurvey`;
     history.push(path);
   };
 
