@@ -8,6 +8,7 @@ import AssignSurveyView from "./components/pages/AssignSurveyView";
 import AddAthletes from "./components/pages/AddAthlete/AddAthletes";
 import StudentDash from "./components/StudentDash/StudentDash";
 import TakeSurvey from "./components/StudentTakeSurvey/TakeSurvey";
+import ChangePass from "./components/StudentDash/ChangePassView";
 
 class App extends Component {
   render() {
@@ -21,6 +22,7 @@ class App extends Component {
           <Route path="/addAth" component={AddAthletes} />
           <Route path="/studentdash" component={StudentDash} />
           <Route path="/takesurvey" component={TakeSurvey} />
+          <Route path="/changepassword" component={ChangePass} />
         </div>
       </Router>
     );
