@@ -76,7 +76,7 @@ class AddAthletes extends Component {
     return (
       <div className="Add-Ath">
         <header>
-          <Button className="Back-button" onClick={this.redirectToHome}></Button>
+          <Button className="Back-button" onClick={this.redirectToHome}>BACK</Button>
           <AppHeader />
           <AppSubHeader title="Add Athlete" />
         </header>
