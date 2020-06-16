@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import { render } from "@testing-library/react";
 
 class AppHeader extends Component {
   render() {
@@ -7,7 +6,7 @@ class AppHeader extends Component {
       color: "black",
       fontFamily: "Calibri",
       paddingTop: "10px",
-      paddingBotton: "5px",
+      paddingBottom: "5px",
       textDecoration: "overline",
       margin: "10px auto",
     };

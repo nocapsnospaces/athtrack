@@ -7,8 +7,9 @@ from flask import render_template, request, Response, send_from_directory, make_
 from flask_login import current_user, login_user, logout_user, login_required
 
 from athtrack import app, cache, db
-from athtrack.services.JsonDataTemplates import teamInfo
-from athtrack.models import Athlete, Coach, Team, User
+from athtrack.mixins import InfoMixin
+from athtrack.models import Athlete, Survey, Team, User
+from athtrack.services.JsonDataTemplates import teamInfo, athleteInfo
 
 
 @app.route('/favicon.ico')
@@ -25,6 +26,7 @@ def index():
 @app.route('/api/v1/time')
 def get_current_time():
     return {'time': time()}
+
 
 @app.route('/api/v1/user/create/', methods=["POST"])
 def add_user():
@@ -121,15 +123,24 @@ def coach_info(id):
 
 
 @app.route('/api/v1/team/<int:id>/', methods=['GET'])
-def team_info(id):
+@info_route(fields=['id'])
+def team_info(id, fields=None):
     team = Team.query.filter_by(id=id).first()
     if team is None:
         return Response(json.dumps({"msg": "not here"}), status=404)
-    fields = request.args.getlist('fields', None)
-    if len(fields) == 0:
-        fields = None
+    
     info = team.info(fields=fields)
     return Response(json.dumps(info), status=200)
+
+
+# get information for all students
+@app.route('/api/v1/athletes/', methods=["GET"])
+def athletes_info():
+    athletes = Athlete.query.filter_by(team_id=None)
+    if athletes is None:
+        return make_response({"msg": "all athletes have teams!"}, status=404)
+    info = athleteInfo(athletes)
+    return make_response(info, 200)
 
 
 @app.route('/api/v1/team/<team_id>/add', methods=['POST'])
@@ -160,4 +171,34 @@ def route_add_athletes_to_team(team_id):
         else:
             Athlete.query.get(u).team_id = team_id
             db.session.commit()
-            return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+
+    return Response(json.dumps({'msg': 'athletes added successfully'}),status=200)
+
+
+
+@app.route('/api/v1/survey/<int:id>/assign/', methods=['POST'])
+def assign_to_survey(id):
+    """
+    {
+        "athletes": [1, 2, 3, 4, 5]
+    }
+    """
+
+    if not request.is_json:
+        return Response(json.dumps({'msg': 'go away'}), status=400)
+
+    data = request.get_json()
+    athletes = data.get('athletes', None)
+
+    if athletes is None:
+        return Response(json.dumps({'msg': 'bad request'}), status=400)
+    survey = Survey.query.filter_by(id=id).first()
+    if survey is None:
+        return Response(json.dumps({'msg': 'bad request'}), status=400)
+
+    # TODO: sanitize the athlete pks, eh.
+    athletes = Athlete.query.filter(Athlete.id.in_(athletes)).all()
+    survey.assignees += athletes
+    db.session.add(survey)
+    db.session.commit()
+    return Response(status=200)

@@ -1,11 +1,11 @@
 import React from "react";
-import {  useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
-function TeamButton(props) {
+function SurveyButton(props) {
   const history = useHistory();
 
   const routeChange = () => {
-    let path = `/team`;
+    let path = `/takesurvey`;
     history.push(path);
   };
 
@@ -27,4 +27,4 @@ function TeamButton(props) {
   );
 }
 
-export default TeamButton;
+export default SurveyButton;

@@ -1,11 +1,11 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function LongButton(props) {
+function SaveButton(props) {
   const history = useHistory();
 
   const routeChange = () => {
-    let path = `/`;
+    let path = `/studentdash`;
     history.push(path);
   };
 
@@ -29,4 +29,4 @@ function LongButton(props) {
   );
 }
 
-export default LongButton;
+export default SaveButton;

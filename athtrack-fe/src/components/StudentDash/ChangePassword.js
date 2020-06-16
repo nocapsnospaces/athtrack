@@ -1,14 +1,13 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 
-function LongButton(props) {
+function ChangePassword(props) {
   const history = useHistory();
 
   const routeChange = () => {
-    let path = `/`;
+    let path = `/changepassword`;
     history.push(path);
   };
-
   const mystyle = {
     width: "400px",
     height: "30px",
@@ -29,4 +28,4 @@ function LongButton(props) {
   );
 }
 
-export default LongButton;
+export default ChangePassword;

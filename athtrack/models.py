@@ -1,25 +1,13 @@
+from functools import wraps
+
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
-
-from athtrack import db, login
-
 from sqlalchemy.ext.declarative import declarative_base
 
-Base = declarative_base()
+from athtrack import db, login
+from athtrack.mixins import InfoMixin
 
-class InfoMixin:
-    _info_fields = []  # Override this to set the default fields
-    def info(self, fields=None):
-        if fields is None:
-            fields = self._info_fields
-        i = {}
-        for a in fields:
-            try:
-                v = getattr(self, a)
-                i[a] = v
-            except AttributeError:
-                continue
-        return i
+Base = declarative_base()
 
 class User(UserMixin, db.Model, InfoMixin):
     _info_fields = ['id', 'email', 'name']
@@ -48,6 +36,13 @@ def load_user(id):
 team_association_table = db.Table('team_association_table',
     db.Column('coach_id', db.Integer, db.ForeignKey('coach.id')),
     db.Column('team_id', db.Integer, db.ForeignKey('team.id')),
+)
+
+# bridges for days
+survey_assignment_table = db.Table('survey_assignment_table',
+    db.Column('athlete_id', db.Integer, db.ForeignKey('athlete.id')),
+    db.Column('survey_id', db.Integer, db.ForeignKey('survey.id')),
+    db.Column('taken', db.Boolean, nullable=False, default=False)
 )
 
 
@@ -81,6 +76,19 @@ class Athlete(User):
     
     id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
     team_id = db.Column(db.Integer, db.ForeignKey('team.id'))
+    surveys = db.relationship("Survey", secondary=survey_assignment_table, back_populates='assignees')
+    
+    def info(self, fields=None):
+        if fields is None:
+            fields = ['id', 'email', 'team_id']
+        i = {}
+        for a in fields:
+            try:
+                v = getattr(self, a)
+                i[a] = v
+            except AttributeError:
+                continue
+        return i
 
 
 class Team(db.Model, InfoMixin):
@@ -108,7 +116,7 @@ class Team(db.Model, InfoMixin):
         return i
 
 
-class Survey(db.Model):
+class Survey(db.Model, InfoMixin):
     __tablename__ = 'survey'
     _info_fields = ['id', 'question', 'options']
     
@@ -116,6 +124,7 @@ class Survey(db.Model):
     question = db.Column(db.Text, nullable=False)
     # can get all survey responses by survey.options.answers
     options = db.relationship('SurveyOptions', backref='survey')
+    assignees = db.relationship("Athlete", secondary=survey_assignment_table, back_populates='surveys')
 
     def answers(self):
         return self.options.answers
