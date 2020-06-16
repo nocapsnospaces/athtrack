@@ -64,6 +64,9 @@ def user_login():
     data = request.get_json(force=True)
     email = data.get('email', None)
     password = data.get('password', None)
+    if email is None or password is None:
+        return Response(json.dumps({"msg": "go away"}), status=400)
+    
     u = User.query.filter_by(email=email).first()
     if u is None:
         return Response(json.dumps({"msg": "go away"}), status=404)
@@ -71,7 +74,7 @@ def user_login():
         return Response(json.dumps({"msg": "go away"}), status=401)
     login_user(u)
     user_info = u.info()
-    return Response(json.dumps({"msg": "set the session cookie, plox", "user": user_info}), status=200)
+    return Response(json.dumps({"user": user_info}), status=200)
 
 
 @app.route('/api/v1/logout/')
