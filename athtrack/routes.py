@@ -67,12 +67,18 @@ def user_login():
     if email is None or password is None:
         return Response(json.dumps({"msg": "go away"}), status=400)
     
-    u = User.query.filter_by(email=email).first()
+    u = Coach.query.filter_by(email=email).first()
+    if u is None:
+        u = Athlete.query.filter_by(email=email).first()
+    
     if u is None:
         return Response(json.dumps({"msg": "go away"}), status=404)
+    
     if not u.check_password(password):
         return Response(json.dumps({"msg": "go away"}), status=401)
+    
     login_user(u)
+    
     user_info = u.info()
     return Response(json.dumps({"user": user_info}), status=200)
 
