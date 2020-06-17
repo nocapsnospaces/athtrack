@@ -3,7 +3,6 @@ import AppHeader from "../../AppHeader";
 import AppSubHeader from "../../AppSubHeader";
 import "./AddAthletes.css";
 import { Multiselect } from 'multiselect-react-dropdown';
-import { Link} from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
 class AddAthletes extends Component {
@@ -23,7 +22,7 @@ class AddAthletes extends Component {
     const { history } = this.props;
     let path = `/team`;
     history.push({ pathname: path, state: this.state.returnState });
-   }
+  }
 
   componentDidMount() {
     fetch("http://localhost:3000/api/v1/athletes/", {
@@ -37,22 +36,22 @@ class AddAthletes extends Component {
 
   //add the selected athletes to the team
   addAthletes() {
-    
+
     var TBAAthletes = this.multiselectRef.current.getSelectedItems();
-    if(TBAAthletes.length > 0){
-    var ids = [];
-    for (var i = 0; i < TBAAthletes.length; i++) {
-      ids.push(TBAAthletes[i].id);
+    if (TBAAthletes.length > 0) {
+      var ids = [];
+      for (var i = 0; i < TBAAthletes.length; i++) {
+        ids.push(TBAAthletes[i].id);
+      }
+      var Addurl = "http://localhost:5000/api/v1/team/" + String(this.state.team) + "/add";
+      fetch(Addurl, {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ students: ids })
+      })
+        .then(res => { this.redirectToHome() })
     }
-    var Addurl = "http://localhost:5000/api/v1/team/" + String(this.state.team) + "/add";
-    fetch(Addurl, {
-      method: "POST",
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ students: ids })
-    })
-    .then(res => {this.redirectToHome()})
-  }
-  else{this.redirectToHome()}
+    else { this.redirectToHome() }
 
   }
 
@@ -70,9 +69,6 @@ class AddAthletes extends Component {
   }
 
   render() {
-    const { athletes } = this.state;
-    const { history } = this.props;
-
     return (
       <div className="Add-Ath">
         <header>
